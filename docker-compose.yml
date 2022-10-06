@@ -1,0 +1,40 @@
+version: '3.9'
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  # mongodb:
+  #   build: ./backend
+  #   volumes:
+  #     - ./backend/mongodb:/var/lib/mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     mongodb+srv://u1800085:Mewwarwick01@cluster0.1pjkfmk.mongodb.net/?retryWrites=true&w=majority
+  #   networks:
+  #     - app-tier
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./backend:/go/src/github.com/edsml-kl121/test_go/backend
+    ports:
+      - "5000:5000"
+    # links:
+    #   - mongodb
+    networks:
+      - app-tier
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        app_env: ${APP_ENV}
+    volumes:
+      - ./frontend/src:/frontend/src
+    ports:
+      - "3000:3000"
